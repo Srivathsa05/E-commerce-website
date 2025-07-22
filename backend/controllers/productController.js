@@ -29,12 +29,22 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
   const resPerPage = 8;
   const productsCount = await Product.countDocuments();
 
-  const apiFeatures = new APIFeatures(Product.find(), req.query)
+  console.log(' Before Request Query: ', req.query)
+  
+  let query = { page: req.query.page, limit: req.query.limit}
+  
+  console.log('After Request Query: ', query)
+
+  const apiFeatures = new APIFeatures(Product.find(), query)
     .search()
     .filter()
     .pagination(resPerPage);
 
+    console.log('Data from Database for Products: ', APIFeatures)
+
   const products = await apiFeatures.query;
+
+  console.log('Products: ', products)
 
   res.status(200).json({
     success: true,

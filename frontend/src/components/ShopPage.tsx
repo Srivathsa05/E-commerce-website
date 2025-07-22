@@ -185,14 +185,8 @@ export function ShopPage({ onProductClick }: ShopPageProps) {
   // Get the current category from URL
   const currentCategory = searchParams.get('category') || 'All';
 
-  // Clean up URL parameters when component unmounts
-  useEffect(() => {
-    return () => {
-      const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.delete('category');
-      setSearchParams(newSearchParams, { replace: true });
-    };
-  }, [searchParams, setSearchParams]);
+  // (Removed cleanup useEffect that cleared category param on unmount)
+  // This was causing navigation issues and should not be present.
 
   // Memoize filtered products to prevent unnecessary recalculations
   const filteredProducts = useMemo(() => {
@@ -308,6 +302,15 @@ export function ShopPage({ onProductClick }: ShopPageProps) {
           </div>
         </div>
 
+        {/* Checkout Button */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => window.location.pathname !== '/checkout' && window.location.assign('/checkout')}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition-colors"
+          >
+            Go to Checkout
+          </button>
+        </div>
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.length > 0 ? (
